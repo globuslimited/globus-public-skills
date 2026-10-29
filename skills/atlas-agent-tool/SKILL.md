@@ -1,6 +1,6 @@
 ---
 name: atlas-agent-tool
-description: Operate the atlas-agent CLI or POST /api/atlas-agent/run through action discovery, inspection, dry-run, and apply. Use for bot/operator workflows, not package implementation. For GLOBUS advertising results and incoming leads, pair it with the ads-manager skill.
+description: Operate the atlas-agent CLI or POST /api/atlas-agent/run through action discovery, inspection, dry-run, and apply. Use for bot/operator workflows, not package implementation.
 ---
 
 # Atlas Agent Tool
@@ -10,8 +10,6 @@ Use this skill to read and change Atlas data through the action catalog. One req
 This skill is not the source of truth for package layout or implementation. The live contract is `actions.list` and `actions.describe`.
 
 The catalog is the same over HTTP and the local `atlas-agent` CLI. It is not an Atlas Manager tool and not an SMM bot tool.
-
-GLOBUS advertising decisions — which campaign to change, what a qualified lead is, and how to read Google and Meta next to these numbers — live in the `ads-manager` skill. This skill supplies the Atlas read: Sources, recent applications, discard reasons, Clients, and the project card.
 
 ## Modules
 
