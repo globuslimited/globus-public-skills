@@ -3,7 +3,7 @@
 Skills for operators. They are installed together:
 
 ```bash
-npx skills add globuslimited/atlas-agent-skill
+npx skills add globuslimited/globus-public-skills
 npx skills update
 ```
 
