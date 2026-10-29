@@ -19,9 +19,26 @@ Catalog stays a lead, and it is Secondary because the intent differs. A project 
 
 EN GTM container `257478079` (GTM-PKTFQWFV), published version 15: tag 57 uses the Primary label and trigger 67 (`landing_lead_submit` and `form_type` exactly estimate). Tag 68 uses the Secondary label and trigger 50 (`form_type` exactly catalog). Other `form_type` values are not covered. Adding a type is a separate task. Publishing and reading the container are not a test that a form reached Atlas.
 
+## How to read a period
+
+Use one period for every system. If the operator does not name it, use the last three months, the same default as Atlas.
+
+1. Google Ads on `3704066294`: spend, impressions, clicks, and conversions by campaign. Then the breakdown the question needs, such as search terms, geography, or day. Spend is `cost_micros` / 1,000,000, in USD.
+2. Meta on `act_2523358247887690`: insights for the same period. Separate Instagram from any older Facebook, Messenger, or Audience Network delivery. Do not treat historical spend on those placements as the current plan. Spend in insights is already dollars.
+3. GA4 or GTM only when the question is the form event or the tag, not the lead outcome.
+4. Atlas, through `atlas-agent-tool`, for that same `start` and `end`:
+   - `analytics.sources.summary` for applications and project budget by source.
+   - `analytics.sources.recentApplications` when the question is the leads that arrived, newest first. `analytics.sources.projects` when the question is a filtered cohort.
+   - `analytics.sources.discardReasons` when the question is why leads were discarded.
+   - `analytics.clients.summary` when the question is purchase and profit. Those amounts are CNY.
+   - `analytics.projects.get` for one project. `projects.snapshot` when the working picture is needed: notes, tasks, and recent messages that the actor is allowed to see. A missing section stays empty.
+5. A qualified lead still means a real property, a whole project, and a budget from US$30,000. Atlas status alone does not prove that.
+
+Google and Meta spend, a form conversion, a Sources budget (`orders.price`), and Clients revenue are four different numbers. Do not add them into one total. A gap between a form event and an Atlas project is not by itself a tracking failure: the clocks, windows, and attribution rules differ.
+
 ## Form, Atlas, and attribution
 
-Applications and money are read with `atlas-agent-tool`: Sources for projects and `orders.price`, Clients for purchase and profit in CNY, and `analytics.projects.get` for one project. Ads and GA4 show the form event. Do not add the two systems together. A difference is not by itself a tracking failure: the clocks, windows, and attribution rules differ.
+Applications and money are read with `atlas-agent-tool`, as above. Ads and GA4 show the form event.
 
 Auto-tagging stays ON. Check it, and do not change the account setting on your own. The form stores gclid in a hidden field and sends it to Atlas.
 

@@ -40,9 +40,21 @@ Account `accounts/6000035223`, Globus.
 
 Property format: `sc-domain:<domain>`. globus.world and globus-china.com have been listed. globus-home.com and globus-home.ru were intentionally closed to indexing. Do not treat their absence as a fault, and do not create those properties unless the operator changes that strategy.
 
+## Credentials the operator supplies
+
+This skill does not contain secrets. The person using it provides them for the session. If a required secret is missing, ask. Do not search the machine for key files, and do not print the values.
+
+| Secret | Use |
+|---|---|
+| Google service-account JSON | Ads, GA4, GTM, Search Console. Standard pointer: `GOOGLE_APPLICATION_CREDENTIALS` |
+| Google Ads developer token | Header `developer-token` on every Ads request |
+| Meta access token | Facebook Ads Manager / Marketing API. Accepted names if present: `META_ACCESS_TOKEN`, then `FACEBOOK_ADS_MANAGER` |
+
+Atlas is not one of these keys. Its session comes from `atlas-agent-tool`.
+
 ## Google credentials
 
-Use the service-account credentials the operator provided for this session. Sign a JWT bearer against `https://oauth2.googleapis.com/token`. Do not write the key to a world-readable file. Delete any temporary key file as soon as the signature is made.
+Sign a JWT bearer against `https://oauth2.googleapis.com/token`. Do not write the key to a world-readable file. Delete any temporary key file as soon as the signature is made.
 
 Scopes that have been used for reading:
 
@@ -56,13 +68,20 @@ Writing needs its own scopes and a separate agreement.
 | Service | Endpoint |
 |---|---|
 | Ads search | `https://googleads.googleapis.com/{version}/customers/{customer_id}/googleAds:search` |
+| Ads change | `https://googleads.googleapis.com/{version}/customers/{customer_id}/googleAds:mutate` |
 | Ads discovery | `https://googleads.googleapis.com/{version}/customers:listAccessibleCustomers` |
 | GA4 Admin | `https://analyticsadmin.googleapis.com/v1beta/...` |
 | GA4 Data | `https://analyticsdata.googleapis.com/v1beta/properties/{property_id}:runReport` |
 | GTM | `https://tagmanager.googleapis.com/tagmanager/v2/accounts/{account_id}/containers/{container_id}/...` |
 | Search Console | `https://www.googleapis.com/webmasters/v3/sites/{encoded_site_url}/searchAnalytics/query` |
 
-Check which Ads API version the server accepts. Do not freeze an old version number. Divide `cost_micros` by 1,000,000. A `change_event` query needs a bounded `change_event.change_date_time`. Maximize Clicks has appeared as `bidding_strategy_type = TARGET_SPEND`. Encode `sc-domain:example.com` as `sc-domain%3Aexample.com` in the Search Console path. Discovery does not prove a later read or write will succeed. A TLS or DNS error is not a bad key.
+Check which Ads API version the server accepts. Do not freeze an old version number. Send `developer-token` on every Ads call. When the call is for the working client under the MCC, also send `login-customer-id: 2802725492`. Customer ids in the path have no dashes.
+
+Use `googleAds:search` to read campaigns, ad groups, ads, keywords, search terms, geo, and metrics. Divide `cost_micros` by 1,000,000. A `change_event` query needs a bounded `change_event.change_date_time`. Maximize Clicks has appeared as `bidding_strategy_type = TARGET_SPEND`.
+
+Use `googleAds:mutate` only for a change the operator has approved. Create campaigns, ad groups, and ads with status `PAUSED`.
+
+Encode `sc-domain:example.com` as `sc-domain%3Aexample.com` in the Search Console path. Discovery does not prove a later read or write will succeed. A TLS or DNS error is not a bad key.
 
 ## Meta, Instagram only
 
@@ -70,7 +89,9 @@ Placements are Instagram only. See [campaigns](campaigns-and-markets.md).
 
 Use the Meta token the operator provided. Do not print it. Do not treat possession of the token as permission to write. Changes still follow the [operating rules](operating-rules.md).
 
-For reading ads, `ads_read` is enough. Do not use message, content-publishing, comment, or catalog scopes unless the task asks for them.
+Reading ads needs `ads_read`. An agreed change needs `ads_management`. Do not use message, content-publishing, comment, or catalog scopes unless the task asks for them.
+
+Read and manage objects on the ad account: `act_{id}/campaigns`, `act_{id}/adsets`, `act_{id}/ads`, and `act_{id}/insights`. Create new campaigns, ad sets, and ads with `status` `PAUSED` and `publisher_platforms` set to `instagram` only. A Facebook page may be the ad identity. That does not add Facebook as a placement.
 
 | Object | Id |
 |---|---|
