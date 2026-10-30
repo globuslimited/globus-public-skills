@@ -28,3 +28,7 @@ Open the reference for the Atlas module you are in. Each file describes that mod
 - **Writes, permissions, and refusals**: `references/safety-for-operators.md`
 
 `actions.list` with `{}` returns the methods this actor may run. `actions.describe` with `{ "name": "<method>" }` returns that method's input and output.
+
+## Monorepo development
+
+For monorepo development only, use `pnpm exec atlas-agent` and the developer runbook in `../globus-monorepo/references/atlas-agent-tool.md`; it connects directly to MongoDB and must not be distributed. External Atlas data usage by the agent runtime is covered by `node-packages/api-trpc/src/agentActions/internal-skills/atlas-data/SKILL.md`.
